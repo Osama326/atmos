@@ -17,15 +17,19 @@ function App() {
   // AUTO DETECT LOCATION ON LOAD
   // ================================
   useEffect(() => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      fetchWeather("London");
+      return;
+    }
 
     navigator.geolocation.getCurrentPosition(
-      async (position) => {
+      (position) => {
         const { latitude, longitude } = position.coords;
         fetchByCoords(latitude, longitude);
       },
       () => {
-        console.log("Location permission denied");
+        // If user denies location → fallback to London
+        fetchWeather("London");
       }
     );
   }, []);
